@@ -1,8 +1,8 @@
-# Use official Node.js image
-FROM node:16
+# Use an official Node.js image
+FROM node:20-alpine
 
 # Set the working directory
-WORKDIR /app
+WORKDIR /usr/src/app
 
 # Copy package.json and package-lock.json
 COPY package*.json ./
@@ -13,11 +13,8 @@ RUN npm install
 # Copy the rest of the application code
 COPY . .
 
-# Set environment variables (use production environment in production)
-ENV NODE_ENV=production
-
-# Expose port 5000
+# Expose the port your backend runs on
 EXPOSE 5000
 
-# Run the server
-CMD ["npm", "run", "dev"]
+# Command to start the backend server
+CMD ["node", "index.js"]
