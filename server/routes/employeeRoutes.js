@@ -1,20 +1,15 @@
-const express = require('express');
+const express = require("express");
 const {
     getAllEmployees,
-    getEmployeeById,
-    createEmployee,
+    addEmployee,
     updateEmployee,
     deleteEmployee,
-} = require('../controllers/employeeController');
-const validateEmployee = require('../middleware/validateEmployee');
+} = require("../controllers/employeeController");
 
 const router = express.Router();
-
-// Employee routes
-router.get('/', getAllEmployees);
-router.get('/:id', getEmployeeById);
-router.post('/', validateEmployee, createEmployee);
-router.put('/:id', validateEmployee, updateEmployee);
-router.delete('/:id', deleteEmployee);
+router.get("/", getAllEmployees);
+router.post("/", addEmployee);
+router.put("/:id", updateEmployee);
+router.delete("/:id", deleteEmployee);
 
 module.exports = router;

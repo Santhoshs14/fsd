@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 const departments = ["DEVELOPMENT", "HR", "SALES", "ACCOUNTS", "MANAGEMENT"];
 
@@ -6,30 +6,33 @@ const EmployeeForm = ({ onSubmit, onCancel, initialData }) => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    phone_number: "",
+    phone: "",
     department: "",
     date_of_joining: "",
-    role: "",
-    ...initialData,
+    ...initialData, // Pre-fill data for edit
   });
+
   const [errors, setErrors] = useState({});
 
   const validate = () => {
     const newErrors = {};
+
+    // Minimal validation
     if (!formData.name.trim()) newErrors.name = "Name is required.";
+    if (!formData.email.trim()) newErrors.email = "Email is required.";
     if (
       !/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(formData.email)
     )
       newErrors.email = "Invalid email.";
-    if (!/^\d{10}$/.test(formData.phone_number))
+    if (!formData.phone.trim()) newErrors.phone = "Phone number is required.";
+    if (!/^\d{10}$/.test(formData.phone))
       newErrors.phone_number = "Phone number must be 10 digits.";
-    if (!departments.includes(formData.department))
-      newErrors.department = "Invalid department.";
+    if (!formData.department) newErrors.department = "Department is required.";
     if (!formData.date_of_joining)
       newErrors.date_of_joining = "Date of Joining is required.";
     if (new Date(formData.date_of_joining) > new Date())
       newErrors.date_of_joining = "Cannot select a future date.";
-    if (!formData.role.trim()) newErrors.role = "Role is required.";
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -41,13 +44,19 @@ const EmployeeForm = ({ onSubmit, onCancel, initialData }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (validate()) onSubmit(formData);
+
+    if (validate()) {
+      // Call the onSubmit handler passed as a prop
+      onSubmit(formData);
+    }
   };
 
   return (
     <div className="modal">
       <form onSubmit={handleSubmit}>
         <h2>{initialData ? "Edit Employee" : "Add New Employee"}</h2>
+
+        {/* Name Field */}
         <div>
           <label>Name</label>
           <input
@@ -58,6 +67,8 @@ const EmployeeForm = ({ onSubmit, onCancel, initialData }) => {
           />
           {errors.name && <span className="error">{errors.name}</span>}
         </div>
+
+        {/* Email Field */}
         <div>
           <label>Email</label>
           <input
@@ -68,18 +79,20 @@ const EmployeeForm = ({ onSubmit, onCancel, initialData }) => {
           />
           {errors.email && <span className="error">{errors.email}</span>}
         </div>
+
+        {/* Phone Number Field */}
         <div>
           <label>Phone Number</label>
           <input
             type="text"
-            name="phone_number"
-            value={formData.phone_number}
+            name="phone"
+            value={formData.phone}
             onChange={handleChange}
           />
-          {errors.phone_number && (
-            <span className="error">{errors.phone_number}</span>
-          )}
+          {errors.phone && <span className="error">{errors.phone}</span>}
         </div>
+
+        {/* Department Field */}
         <div>
           <label>Department</label>
           <select
@@ -98,6 +111,8 @@ const EmployeeForm = ({ onSubmit, onCancel, initialData }) => {
             <span className="error">{errors.department}</span>
           )}
         </div>
+
+        {/* Date of Joining Field */}
         <div>
           <label>Date of Joining</label>
           <input
@@ -110,18 +125,10 @@ const EmployeeForm = ({ onSubmit, onCancel, initialData }) => {
             <span className="error">{errors.date_of_joining}</span>
           )}
         </div>
+
+        {/* Buttons */}
         <div>
-          <label>Role</label>
-          <input
-            type="text"
-            name="role"
-            value={formData.role}
-            onChange={handleChange}
-          />
-          {errors.role && <span className="error">{errors.role}</span>}
-        </div>
-        <div>
-          <button type="submit">Save</button>
+          <button type="submit">{initialData ? "Update" : "Add"}</button>
           <button type="button" onClick={onCancel}>
             Cancel
           </button>

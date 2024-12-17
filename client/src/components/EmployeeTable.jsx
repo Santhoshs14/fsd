@@ -12,20 +12,18 @@ const EmployeeTable = ({ employees, onEdit }) => {
             <th>Phone</th>
             <th>Department</th>
             <th>Date of Joining</th>
-            <th>Role</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           {employees.map((employee) => (
             <tr key={employee.id}>
-              <td>{employee.employee_id}</td>
+              <td>{employee.id}</td>
               <td>{employee.name}</td>
               <td>{employee.email}</td>
-              <td>{employee.phone_number}</td>
+              <td>{employee.phone}</td>
               <td>{employee.department}</td>
               <td>{employee.date_of_joining}</td>
-              <td>{employee.role}</td>
               <td>
                 <button onClick={() => onEdit(employee)}>Edit</button>
               </td>
